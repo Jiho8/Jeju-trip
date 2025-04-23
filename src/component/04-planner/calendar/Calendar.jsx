@@ -40,7 +40,7 @@ function Calendar({btnName, type, onClick}) {
 
       enterEditMode()
       navigate(`/planner/plannerdetail/${newId}`, {
-      //useLocation.state로 빈 배열 값 보내주기
+      //useLocation.state로 빈 객체 구조 보내주기
       state: {
         isEdit: true,
         id: newId,

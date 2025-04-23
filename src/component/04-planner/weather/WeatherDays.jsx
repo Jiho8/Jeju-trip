@@ -54,7 +54,7 @@ function WeatherDays() {
           </>
         )}
       <Swiper 
-      slidesPerView={4}
+      slidesPerView={5}
       className="mySwiper">
         {
           data?.map((item)=>
