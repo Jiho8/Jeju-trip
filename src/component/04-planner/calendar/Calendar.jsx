@@ -117,8 +117,6 @@ function Calendar({btnName, type, onClick}) {
           scroll={{ enabled: true }}
           locale={ko}
           monthDisplayFormat="yyyy.MM"
-          minDate={new Date()} // 오늘 이후만 가능
-          maxDate={new Date(2025, 11, 31)} // 2025년 12월 31일까지 선택 가능
         />
       </div>
         <button 
