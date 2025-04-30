@@ -52,7 +52,7 @@ function Activity() {
         const sortedCmts = [...cmtData].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         
         return sortedCmts.length > 0
-        ? sortedCmts.map((item, i) => (
+        ? sortedCmts.map((item) => (
           <div
             key={item._id}
             className='tab-content-reply'
@@ -64,6 +64,7 @@ function Activity() {
                 
                 localStorage.post = JSON.stringify({...item.postInfo,hasVote});
                 navigate(`/community/cmdetail/${item.postInfo._id}`)
+                console.log(item);
               } catch (err) {
                 console.error('게시물 데이터 불러오기 실패:', err);
               }
@@ -72,7 +73,7 @@ function Activity() {
             <CmtItem
               title={item.text}
               dateTime={format(item.createdAt, 'yyyy.MM.dd') + '  ' + format(item.createdAt, 'hh:mm')}
-              postTitle={item.postTitle}
+              postTitle={item.postInfo.title}
             />
           </div>
         ))
