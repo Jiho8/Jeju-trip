@@ -197,11 +197,11 @@ https://jeju-trip-eosin.vercel.app/
 ## 📑 요약
 * 담당: 개발 및 배포
 * 담당 컴포넌트 상세
-  1) MyMenu.jsx: '마이페이지' 내 큰 메뉴(체크리스트, 좋아요 등)
-  2) CmtItem.jsx: '나의활동' 페이지 내 사용자가 작성한 댓글 리스트 아이템
-  3) CheckItem.jsx: '체크리스트' 상세페이지 내 체크리스트 아이템(ex. 의류, 전자기기). mui 플러그인 사용.
-  4) AddCheckItem.jsx: '체크리스트' 상세페이지 내 추가용 input 아이템
-  5) Login(KakaoLogin.jsx, NaverLogin.jsx, GoogleLogin.jsx): 로그인 버튼. 클릭 시 긱 소셜 플랫폼에 로그인 요청 
+  -- 1) MyMenu.jsx: '마이페이지' 내 큰 메뉴(체크리스트, 좋아요 등)
+  -- 2) CmtItem.jsx: '나의활동' 페이지 내 사용자가 작성한 댓글 리스트 아이템
+  -- 3) CheckItem.jsx: '체크리스트' 상세페이지 내 체크리스트 아이템(ex. 의류, 전자기기). mui 플러그인 사용.
+  -- 4) AddCheckItem.jsx: '체크리스트' 상세페이지 내 추가용 input 아이템
+  -- 5) Login(KakaoLogin.jsx, NaverLogin.jsx, GoogleLogin.jsx): 로그인 버튼. 클릭 시 긱 소셜 플랫폼에 로그인 요청 
 * 담당 페이지
   : [로그인](https://jeju-trip-eosin.vercel.app/login)
     [마이페이지](https://jeju-trip-eosin.vercel.app/my)
