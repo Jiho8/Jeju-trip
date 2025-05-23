@@ -196,20 +196,20 @@ https://jeju-trip-eosin.vercel.app/
 
 ## 📑 요약
 * 담당: 개발 및 배포
-* 담당 컴포넌트 상세
-  -- 1) MyMenu.jsx: '마이페이지' 내 큰 메뉴(체크리스트, 좋아요 등)
-  -- 2) CmtItem.jsx: '나의활동' 페이지 내 사용자가 작성한 댓글 리스트 아이템
-  -- 3) CheckItem.jsx: '체크리스트' 상세페이지 내 체크리스트 아이템(ex. 의류, 전자기기). mui 플러그인 사용.
-  -- 4) AddCheckItem.jsx: '체크리스트' 상세페이지 내 추가용 input 아이템
-  -- 5) Login(KakaoLogin.jsx, NaverLogin.jsx, GoogleLogin.jsx): 로그인 버튼. 클릭 시 긱 소셜 플랫폼에 로그인 요청 
+* 담당 컴포넌트 상세 <br/>
+  * MyMenu.jsx: '마이페이지' 내 큰 메뉴(체크리스트, 좋아요 등) <br/>
+  * CmtItem.jsx: '나의활동' 페이지 내 사용자가 작성한 댓글 리스트 아이템<br/>
+  * CheckItem.jsx: '체크리스트' 상세페이지 내 체크리스트 아이템(ex. 의류, 전자기기). mui 플러그인 사용.<br/>
+  * AddCheckItem.jsx: '체크리스트' 상세페이지 내 추가용 input 아이템<br/>
+  * Login(KakaoLogin.jsx, NaverLogin.jsx, GoogleLogin.jsx): 로그인 버튼. 클릭 시 긱 소셜 플랫폼에 로그인 요청 
 * 담당 페이지
   : [로그인](https://jeju-trip-eosin.vercel.app/login)
     [마이페이지](https://jeju-trip-eosin.vercel.app/my)
 
 ## 🧩 공통 컴포넌트 제작
-* popup - Btn1Popup.jsx, Btn2Popup.jsx, GetTripPopup.jsx
-* Tab - TabMenu.jsx, TabItem.jsx, TabPage.jsx
-* ListItem.jsx, ListPage.jsx
+* Popup(Btn1Popup.jsx, Btn2Popup.jsx, GetTripPopup.jsx): 로그인 및 로그아웃, 삭제 등 사용자에게 전할 내용이 있을 시 사용하는 팝업. 전달받은 타입에 따라 팝업 내용을 각 화면에 맞게 표시하고, 'onConfirm'으로 버튼 동작을 관리.
+* Tab(TabItem.jsx, TabMenu.jsx, TabPage.jsx): TabPage는 전달받은 타입에 따라 탭 제목과 메인 타이틀을 설정하고, TabMenu를 통해 탭 선택 상태를 표시하며 선택된 탭 인덱스를 상위로 전달.
+* List(ListItem.jsx, ListPage.jsx):
   
 ## 💥 트러블 슈팅
 
