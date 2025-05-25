@@ -8,15 +8,15 @@ import { googleLogout, kakaoLogout, naverLogout } from '../../utils/logout';
 import '../../styles/05-mypage/my.scss';
 
 function My() {
-  const [user, setUser] = useState(null);
-  const [popupType, setPopupType] = useState(null);
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [isDonePopupOpen, setIsDonePopupOpen] = useState(false);
-  const [myTrip, setMyTrip] = useState(null);
   const navigate = useNavigate();
 
-  // 세션 내 access 값이 있으면 true, 없으면 false
-  const isLoggedIn = !!sessionStorage.getItem('access');
+  const [user, setUser] = useState(null);   // 사용자 정보
+  const [popupType, setPopupType] = useState(null);   // 팝업 유형
+  const [isPopupOpen, setIsPopupOpen] = useState(false);   // Btn2Popup 상태 관리
+  const [isDonePopupOpen, setIsDonePopupOpen] = useState(false);  // Btn1Popup 상태 관리
+  const [myTrip, setMyTrip] = useState(null);   // 나의 여행 수
+
+  const isLoggedIn = !!sessionStorage.getItem('access');   // 로그인 여부 확인
 
   // 세션에 저장된 사용자 정보 가져오기
   useEffect(() => {
@@ -56,8 +56,8 @@ function My() {
 
   // 로그아웃 동작 및 팝업 관리
   function handleLogoutConfirm() {
-    const provider = sessionStorage.getItem('provider');
-    setIsPopupOpen(false);
+    const provider = sessionStorage.getItem('provider');  // 로그인된 소셜 정보(?)
+    setIsPopupOpen(false);   // 팝업 닫기
 
     // 로그아웃 완료 팝업 (비동기. 로그아웃 완료 후 진행되어야 함.)
     const afterLogout = () => {
@@ -66,11 +66,11 @@ function My() {
       }, 400);
     }
 
+    // 각 소셜 로그아웃 진행
     if (provider === 'kakao') {
       kakaoLogout();
       return;
     } 
-    
     if (provider === 'naver') {
       naverLogout(afterLogout);
     } else if (provider === 'google') {
@@ -80,8 +80,8 @@ function My() {
 
   // 통화 팝업 관리
   function handleCallConfirm() {
-    const isMobile = /iPhone|Android|iPad/i.test(navigator.userAgent);
-    setIsPopupOpen(false);
+    const isMobile = /iPhone|Android|iPad/i.test(navigator.userAgent);   // 모바일 여부 확인
+    setIsPopupOpen(false);  // 팝업 닫기
 
     if(isMobile) {
       window.location.href = 'tel:15880000';
@@ -116,15 +116,15 @@ function My() {
             <div className='my-menu-trip'>
               <p>여행</p>
               <b onClick={() => {
-                  if (!isLoggedIn) openPopup('login');
-                  else if (!myTrip) openPopup('trip');
-                  else navigate('/planner');
+                  if (!isLoggedIn) openPopup('login');   // 로그인 되어 있지 않은 경우 로그인 요청 팝업 open
+                  else if (!myTrip) openPopup('trip');   // 추가한 여행이 없을 경우 알림 팝업 open
+                  else navigate('/planner');             // 나의 여행 페이지로 이동
                 }}
               >
                 나의 여행 보기
               </b>
               {myTrip !== 0 && (
-                <span className='my-trip-num'>{myTrip}</span>
+                <span className='my-trip-num'>{myTrip}</span>  // 작성한 여행이 있을 때만 여행 수 표시
               )}
               <NavLink to='/planner/pickplan'>추천 일정 보기</NavLink>
             </div>
@@ -135,6 +135,7 @@ function My() {
             </div>
           </div>
 
+          {/* 로그아웃 버튼 */}
           <span className='my-login-out'
                 onClick={() => openPopup('logout')}>
             로그아웃
@@ -174,6 +175,7 @@ function My() {
             </div>
           </div>
 
+          {/* 로그인 버튼 */}
           <span className='my-login-out'
                 onClick={() => navigate('/login')}>
             로그인

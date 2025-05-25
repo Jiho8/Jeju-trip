@@ -3,16 +3,22 @@
     overflow: hidden;
     padding: 20vh 0;
 }
+
+// 본문
 .maintxt{
     position: relative;
     // margin: 160px auto 220px;
     margin: 0 auto 25vh;
     width: 337px;
+
+    // 제목
     h2{
         font-size: 30px;
         font-weight: 200;
         line-height: 150%;
     }
+
+    // 로고 이미지
     p{
         position: absolute;
         left: 80px; bottom: -2px;
@@ -20,9 +26,13 @@
         > img{width: 100%; height: 100%;}
     }
 }
+
+// 버튼
 .maincont{
     width: 337px;
     margin: 0 auto;
+
+    // 소셜 로그인 버튼
     .loginbtns{
         p{cursor: pointer;}
         .login-mobile{display: none;}
@@ -30,7 +40,8 @@
             margin: 16px 0;
         }
     }
-    hr{display: none;}
+
+    // 로그인 하지 않고 이동 버튼
     span{
         text-align: right;
         display: inline-block;
@@ -41,6 +52,7 @@
     }
 }
 
+// 리다이렉트 페이지 - 로그인 요청 후 로딩 화면
 .rd-background{
     position: fixed;
     top: 0;
@@ -55,6 +67,7 @@
     text-align: center;
     font-size: 20px;
 
+    // 로딩 아이콘
     .rb-loading{
         gap: 30px;
         margin-bottom: 20px;
@@ -62,6 +75,8 @@
             width: 30px; height: auto;
         }
     }
+
+    // 로고 이미지
     p{
         position: absolute;
         width: 156px; height: 54px;
@@ -69,6 +84,8 @@
         transform: translate(-50%, -5%);
         > img{width: 100%; height: 100%;}
     }
+
+    // 텍스트
     span{
         position: absolute;
         top: 55%; left: 50%;

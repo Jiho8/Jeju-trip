@@ -30,7 +30,7 @@ function TripList() {
 
   const {shopNfoodNpartyData, fetchCategory} = shopNfoodNparty();
   // api호출로 받아오는 데이터, 데이터를 가져오는 액션 함수
-  
+
   useEffect(()=>{
     if(type==='tour'){
       fetchCategory('c1');
@@ -212,7 +212,7 @@ function TripList() {
 
   useEffect(()=>{ //좋아요 로딩시간이 느려서 빠르게 가져오기 위해 
     if (!loading) {
-      const listData = getFilterData().slice(0, listCount);
+      const listData = getAllData().slice(0, listCount);
       const postIds = listData.map(item=>item.contentsid); // 현재 리스트의 모든 게시물의 아이디값을 배열로 만듦
       fetchLikeData(postIds).then(() => setLikeLoading(false));
     }
@@ -221,7 +221,7 @@ function TripList() {
 
   // db관련 : 사용자가 좋아요 누른 게시물 찾아서 리스트에 표시함
   const fetchUserLikedPosts = async () => {
-    // if (!userId) return;
+    if (!userId) return;
     const res = await fetch(`${process.env.REACT_APP_APIURL}/triplike/liked-posts?userId=${userId}`);
     const data = await res.json();
     
@@ -236,7 +236,7 @@ function TripList() {
   useEffect(() => {
     fetchUserLikedPosts();
   }, [userId]);
-  
+
   return (
     <div className='trip-listpage'>
       <div className='trip-list-topimg'>

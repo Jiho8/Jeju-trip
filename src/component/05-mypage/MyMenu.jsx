@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 function MyMenu({ isLoggedIn, openPopup }) {
 
   const navigate = useNavigate();
+
+  // 각 타입별 메뉴 정보 객체 (type 및 url, icon, title 포함)
   const mymenuContent = [
     {
       type: 'check',
@@ -28,7 +30,9 @@ function MyMenu({ isLoggedIn, openPopup }) {
     }
   ];
 
+  // 메뉴 클릭 시 실행되는 함수
   const handleClick = (url) => {
+    // isLoggedIn prop을 통해 로그인 여부를 확인하여 팝업 및 navigate 처리. 
     if (!isLoggedIn) {
       openPopup('login');
     } else {
@@ -41,7 +45,7 @@ function MyMenu({ isLoggedIn, openPopup }) {
       {
         mymenuContent.map(item => (
           <div key={item.type} className={`my-menu-${item.type}`}
-               onClick={() => {handleClick(item.url)}}
+               onClick={() => {handleClick(item.url)}}    // 클릭 시 url과 함께 함수 실행 요청
                style={{cursor: 'pointer'}}
           >
             {item.icon}

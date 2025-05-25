@@ -14,17 +14,17 @@ function CheckDetail() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const needDefaultData = ['의류', '세면도구 / 화장품', '전자기기', '신분증 / 면허증', '현금', '카드'];
+  const needDefaultData = ['의류', '세면도구 / 화장품', '전자기기', '신분증 / 면허증', '현금', '카드'];  // 필수 준비물 기본값
 
-  const { isEditMode: isEdit, enterEditMode, exitEditMode } = mode();             // Zustand에서 상태와 액션 가져오기
+  const { isEditMode: isEdit, enterEditMode, exitEditMode } = mode();             // Zustand 편집모드 상태 관리 함수
         
-  const [isOpenNeed, setIsOpenNeed] = useState(true);                             // 필수 준비물 메뉴
-  const [isOpenEtc, setIsOpenEtc] = useState(true);                               // 기타 준비물 메뉴
-  const [deleteTarget, setDeleteTarget] = useState({ index: null, type: null });
-  const [isDelPopupOpen, setIsDelPopupOpen] = useState(false);            // 삭제 팝업
-  const [isSavePopupOpen, setIsSavePopupOpen] = useState(false);          // 저장 팝업
+  const [isOpenNeed, setIsOpenNeed] = useState(true);                             // 필수 준비물 토글 상태 관리
+  const [isOpenEtc, setIsOpenEtc] = useState(true);                               // 기타 준비물 토글 상태 관리
+  const [deleteTarget, setDeleteTarget] = useState({ index: null, type: null });  // 삭제 대상 저장
+  const [isDelPopupOpen, setIsDelPopupOpen] = useState(false);            // 삭제 확인 팝업
+  const [isSavePopupOpen, setIsSavePopupOpen] = useState(false);          // 저장 완료 팝업
   const [isExitPopupOpen, setIsExitPopupOpen] = useState(false);          // 페이지 벗어날 때 경고 팝업
-  const [list, setList] = useState(null);                                 // 체크리스트 데이터
+  const [list, setList] = useState(null);                                 // 전체 체크리스트 데이터
   const [ originData, setOriginData ] = useState(null);                   // 처음 불러왔을 때 체크리스트 데이터 (수정 여부 확인 위해)
   const [ needList, setNeedList ] = useState(
     needDefaultData.map(name => ({ name, checked: false }))
@@ -36,9 +36,9 @@ function CheckDetail() {
   });                                                                     // 삭제 버튼 클릭 상태
 
   const { id } = useParams();                                             // url에서 id 가져오기
-  const userId = String(JSON.parse(sessionStorage.getItem('user'))?.id);
+  const userId = String(JSON.parse(sessionStorage.getItem('user'))?.id);  // 세션에 저장된 사용자 id
 
-  const isNewChecklist = location.state?.isEdit === true;
+  const isNewChecklist = location.state?.isEdit === true;       // isEdit 값으로 새 체크리스트 여부 확인
 
   const trash = (index, type) => {
     setTrashClick((prev) => ({
@@ -52,31 +52,27 @@ function CheckDetail() {
   
   // 서버 데이터 가져오기
   useEffect(() => {
-    // zustand - isEdit 값으로 새 데이터와 기존 데이터 구분
     if (isNewChecklist) {
-      enterEditMode(); // 편집 모드 zustand에 전달
-
-      // 새 체크리스트 데이터
-      const newList = addNewList(location.state);
+      enterEditMode();   // 새 체크리스트는 편집 모드로 진입.
+      const newList = addNewList(location.state);   // state로 전달 받은 데이터 가져오기
       setList(newList);
       setOriginData(JSON.parse(JSON.stringify(newList)));
       return;
     }
 
-    // 기존 데이터 불러오기
+    // 기존 체크리스트 데이터 불러오기
     axios.get(`${process.env.REACT_APP_APIURL}/check/user/${userId}/${id}`)
     .then(res => {
       const allData = res.data;
 
-      setList(allData);
-      setNeedList(allData.item?.Need || []);
-      setEtcList(allData.item?.Etc || []);
-
-      setOriginData(JSON.parse(JSON.stringify(allData)));      // 처음 데이터 저장
+      setList(allData);    // 전체 데이터
+      setNeedList(allData.item?.Need || []);  // 필수 준비물
+      setEtcList(allData.item?.Etc || []);    // 기타 준비물
+      setOriginData(JSON.parse(JSON.stringify(allData)));   // 처음 데이터 저장
     })
   }, [id, userId, location.state]);
 
-  // state 값으로 생성한 새 체크리스트 데이터 구조
+  // 새 체크리스트 구조 생성 함수
   function addNewList(state) {
     const { planId = null, title = '', date = '' } = location.state || {};
     return {
@@ -91,15 +87,15 @@ function CheckDetail() {
     };
   }
 
-  // 서버에 데이터 저장
+  // 저장 팝업 열기 및 저장 실행
   function openSavePopup() {
+    // 삭제된 항목 필터링
     let filteredNeedList = needList;
     let filteredEtcList = etcList;
 
     const isNeedDeleted = trashClick.need.includes(true);
     const isEtcDeleted = trashClick.etc.includes(true);
 
-    // 삭제된 항목 제외
     if (isNeedDeleted) {
       filteredNeedList = needList.filter((_, i) => !trashClick.need[i]);
     }
@@ -118,16 +114,8 @@ function CheckDetail() {
     if(isNewChecklist || isDataChanged || isDeleted) {
       setIsSavePopupOpen(true);
 
-      const newList = {
-        ...list,
-        item: {
-          Need: filteredNeedList,
-          Etc: filteredEtcList
-        }
-      };
-
-      // 저장 후 originData 업데이트
-      setOriginData(JSON.parse(JSON.stringify(newList)));
+      const newList = { ...list, item: { Need: filteredNeedList, Etc: filteredEtcList } };
+      setOriginData(JSON.parse(JSON.stringify(newList)));  // 저장 후 원본 데이터 업데이트
 
       if (isNewChecklist) {
         // 새 체크리스트일 경우 POST
@@ -137,11 +125,11 @@ function CheckDetail() {
         updateCheckData(newList);
       }
     } else {
-      exitEditMode();
+      exitEditMode();   // 변경 없음 -> 편집 모드만 종료
     }
   }
 
-  // 새 체크리스트 추가
+  // 새 체크리스트 추가 (POST)
   function saveCheckData(newList) {
     axios.post(`${process.env.REACT_APP_APIURL}/check`, { userId, newList })
     .catch(err => {
@@ -150,7 +138,7 @@ function CheckDetail() {
     });
   }
 
-  // 기존 체크리스트 수정 및 삭제
+  // 기존 체크리스트 수정 및 삭제 (PUT)
   function updateCheckData(newList) {
     axios.put(`${process.env.REACT_APP_APIURL}/check`, { userId, newList })
     .catch(err => {
@@ -159,7 +147,7 @@ function CheckDetail() {
     });
   }
   
-  // 삭제 버튼 팝업 처리
+  // 삭제 버튼 팝업 처리 및 삭제
   function handleDeleteConfirm() {
     const { index, type } = deleteTarget;
   
@@ -178,7 +166,7 @@ function CheckDetail() {
     setIsDelPopupOpen(false);
   }
 
-  // 편집 모드 나가기
+  // 닫기 버튼
   function handleClose() {
     const isNewChecklist = location.state?.isEdit === true;
 
@@ -187,18 +175,16 @@ function CheckDetail() {
       JSON.stringify(originData?.item?.Etc) !== JSON.stringify(etcList);
 
     if(isDataChanged) {
-      setIsExitPopupOpen(true);
+      setIsExitPopupOpen(true);   // 변경 사항 있을 경우 팝업 open
     } else {
       exitEditMode();
 
-      // 새 체크리스트일 경우 리스트 페이지로 이동
-      if(isNewChecklist) {
-        navigate(-1);
-      }
+      // 새 체크리스트일 경우 이전 페이지로 이동
+      if(isNewChecklist) navigate(-1);
     }
   }
   
-  if(!list) return <p> 해당 리스트를 찾을 수 없습니다. </p>
+  if(!list) return <p> 해당 리스트를 찾을 수 없습니다. </p>  // 데이터 없을 때
   
   return (
     <div className='checkdetail-page'>
@@ -221,80 +207,88 @@ function CheckDetail() {
             }
           }}
         >
-          {isEdit ? '완료' : '편집'}
+          {
+            // 버튼 텍스트 변경
+            isEdit ? '완료' : '편집'
+          }
         </button>
       </div>
 
+      {/* 필수 준비물 */}
       <div className='needitembox'>
         <Toggle title={'필수 준비물'} isOpen={isOpenNeed} setIsOpen={setIsOpenNeed} />
         {isOpenNeed && ( 
           <>
             <CheckItem
-            list={needList}
-            setList={setNeedList}
-            isEdit={isEdit}
-            type={'need'}
-            trashClick={trashClick.need}
-            trash={trash}
-            setIsPopupOpen={setIsDelPopupOpen}
+            list={needList}         // 전체 데이터
+            setList={setNeedList}   // 데이터 상태 변경 함수
+            isEdit={isEdit}         // 편집 모드 상태
+            type={'need'}           // 데이터 유형 (필수/기타)
+            trashClick={trashClick.need}         // 삭제 상태 전달
+            trash={trash}                        // 삭제 버튼 클릭 핸들러 전달
+            setIsPopupOpen={setIsDelPopupOpen}   // 팝업 상태 변경 함수
             />
-            {isEdit ? <div className='detail-swipehand'><SwipeHand/></div> : null}
+            {
+              // 편집 모드일 경우 밀어서 삭제 기능을 사용자에게 알리기 위해 모션 추가.
+              isEdit ? <div className='detail-swipehand'><SwipeHand/></div> : null
+            }
           </>
         )}
       </div>
+
+      {/* 기타 준비물 */}
       <div>
         <Toggle title={'기타 준비물'} isOpen={isOpenEtc} setIsOpen={setIsOpenEtc} />
         {isOpenEtc && ( 
           <CheckItem 
-            list={etcList}
-            setList={setEtcList}
-            isEdit={isEdit}
-            type={'etc'}
-            trashClick={trashClick.etc}
-            trash={trash}
-            setIsPopupOpen={setIsDelPopupOpen}
+            list={etcList}         // 전체 데이터
+            setList={setEtcList}   // 데이터 상태 변경 함수
+            isEdit={isEdit}        // 편집 모드 상태
+            type={'etc'}           // 데이터 유형 (필수/기타)
+            trashClick={trashClick.etc}         // 삭제 상태 전달
+            trash={trash}                       // 삭제 버튼 클릭 핸들러 전달
+            setIsPopupOpen={setIsDelPopupOpen}  // 팝업 상태 변경 함수
           /> 
         )}
       </div>
 
+      {/* 저장 완료 팝업 */}
       {isSavePopupOpen && (
         <Btn1Popup
           isOpen={isSavePopupOpen}
           setIsOpen={setIsSavePopupOpen}
           type={'save'}
           onConfirm={() => {
-            setIsSavePopupOpen(false)
-            exitEditMode();
+            setIsSavePopupOpen(false); // 팝업 닫기
+            exitEditMode();            // 편집 모드 나가기
 
             // 새 체크리스트인 경우          
-            if (isNewChecklist) {
-              navigate(-1);
-            }
+            if (isNewChecklist) navigate(-1);
           }}
         />
       )}
 
+      {/* 나가기 경고 팝업 */}
       {isExitPopupOpen && (
         <Btn2Popup
           isOpen={isExitPopupOpen}
           setIsOpen={setIsExitPopupOpen}
           type={'exit'}
           onConfirm={() => {
-            setIsExitPopupOpen(false);
-            exitEditMode();
+            setIsExitPopupOpen(false); // 팝업 닫기
+            exitEditMode();            // 편집 모드 나가기
 
             // 수정사항 되돌리기 (원본으로 복구)
             setNeedList(JSON.parse(JSON.stringify(originData?.item?.Need || [])));
             setEtcList(JSON.parse(JSON.stringify(originData?.item?.Etc || [])));
 
             // 새 체크리스트인 경우          
-            if (isNewChecklist) {
-              navigate(-1);
-            }
+            if (isNewChecklist) navigate(-1);
           }}
         />
       )}
 
+      {/* 삭제 확인 팝업 */}
       {isDelPopupOpen && (
         <Btn2Popup
           isOpen={isDelPopupOpen}

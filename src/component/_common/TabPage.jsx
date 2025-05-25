@@ -1,9 +1,9 @@
 import React from 'react'
 import TabMenu from './TabMenu';
 
-function TabPage({ type, onTabChange, selectedTab }) {
-  // 제목 입력, 선택된 탭 기억, 탭에 따라 내용 
+function TabPage({ type, onTabChange, selectedTab }) { 
 
+  // 각 타입별 탭 정보 객체 (메인 타이틀과 탭 제목 배열 포함)
   const tab = {
     activity: {
       mainTitle: '나의 활동',
@@ -26,6 +26,7 @@ function TabPage({ type, onTabChange, selectedTab }) {
   return (
     <>
       <h2 className='tab-maintitle'>{tab[type].mainTitle}</h2>
+      {/* 타이틀 및 탭 상태 관리를 위한 변수 전달 */}
       <TabMenu tabTitle={tab[type].tabTitle} onTabChange={onTabChange} selectedTab={selectedTab}/>
     </>
   )

@@ -2,9 +2,10 @@ import React from 'react'
 import Warning from '../icons/Warning';
 import Call from '../icons/Call';
 
+// 버튼이 2개인 확인용 팝업
 function Btn2Popup({ isOpen, setIsOpen, type, onConfirm, onCancel, className='' }) {
 
-  // type별 팝업 내용
+  // 각 타입별 팝업 정보 객체 (본문 및 버튼, 아이콘 포함)
   const popupContent = {
     login: {
       txt: `로그인이 필요한 페이지입니다.
@@ -34,7 +35,7 @@ function Btn2Popup({ isOpen, setIsOpen, type, onConfirm, onCancel, className='' 
     },
     exit: {
       txt: '작성중인 내용이 있습니다. 나가시겠습니까?',
-      subtxt: '변경사항은 저장되지 않습니다.',
+      subtxt: '변경사항은 저장되지 않습니다.',    // 부가 설명 텍스트
       btntxt1: '아니오',
       btntxt2: '예',
       icon: <Warning className={'popup-warningicon'}/>
@@ -61,6 +62,7 @@ function Btn2Popup({ isOpen, setIsOpen, type, onConfirm, onCancel, className='' 
     <div className={className ? className : 'popup-box'} onClick={closePopup}>
       <div className='popup'>
 
+        {/* 아이콘 및 팝업 본문 */}
         <div className='popup-cont'>
           {popupContent[type]?.icon}
           <p>
@@ -69,19 +71,22 @@ function Btn2Popup({ isOpen, setIsOpen, type, onConfirm, onCancel, className='' 
           </p>
         </div>
 
+        {/* 팝업 버튼 */}
         <div className='popup-btns-box'>
+          {/* 취소 버튼 */}
           <button 
             className='btn2popup-btn' 
             onClick={() => {
-              setIsOpen(false);
-              if (onCancel) onCancel();
+              setIsOpen(false);           // 팝업 닫기
+              if (onCancel) onCancel();   // onCancel 콜백 함수가 있으면 호출
             }}>
             {popupContent[type]?.btntxt1}
           </button>
+          {/* 확인 버튼 */}
           <button
             className='btn1popup-btn'
             onClick={() => {
-              if (onConfirm) onConfirm(); // callback 실행
+              if (onConfirm) onConfirm();  // onConfirm 콜백 함수 호출
           }}>
             {popupContent[type]?.btntxt2}
           </button>

@@ -1,9 +1,10 @@
 import React from 'react'
 import Warning from '../icons/Warning';
 
+// 버튼이 1개인 단순 확인용 팝업
 function Btn1Popup({ isOpen, setIsOpen, type, onConfirm, className='' }) {
 
-  // type별 팝업 내용
+  // 각 타입별 팝업 정보 객체 (본문 및 아이콘 포함)
   const popupContent = {
     logout: {
       txt: '로그아웃되었습니다'
@@ -33,15 +34,16 @@ function Btn1Popup({ isOpen, setIsOpen, type, onConfirm, className='' }) {
   return (
     <div className={className ? className : 'popup-box'} onClick={closePopup}>
       <div className='popup'>
-
+        {/* 아이콘 및 팝업 본문 */}
         <div className='popup-cont'>
           {popupContent[type]?.icon}
           <p>{popupContent[type]?.txt}.</p>
         </div>
 
+        {/* 팝업 버튼 */}
         <div className='popup-btns-box'>
           <button className='btn1popup-btn' onClick={() => {
-            if (onConfirm) onConfirm();  // 조건부 실행
+            if (onConfirm) onConfirm();  // 조건부 실행. 콜백함수 없으면 별도의 동작 없이 팝업만 닫음.
             else setIsOpen(false); 
           }}>
             확인

@@ -40,7 +40,7 @@ function Calendar({btnName, type, onClick}) {
 
       enterEditMode()
       navigate(`/planner/plannerdetail/${newId}`, {
-      //useLocation.state로 빈 배열 값 보내주기
+      //useLocation.state로 빈 객체 구조 보내주기
       state: {
         isEdit: true,
         id: newId,
@@ -117,7 +117,6 @@ function Calendar({btnName, type, onClick}) {
           scroll={{ enabled: true }}
           locale={ko}
           monthDisplayFormat="yyyy.MM"
-          minDate={new Date()} // 오늘 이후만 가능
         />
       </div>
         <button 
